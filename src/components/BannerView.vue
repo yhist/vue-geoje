@@ -51,18 +51,15 @@
           @swiper = swBanner
           class="sw-banner"
         >
-
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-0"></a></SwiperSlide>
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-1"></a></SwiperSlide>
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-2"></a></SwiperSlide>
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-3"></a></SwiperSlide>
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-4"></a></SwiperSlide>
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-5"></a></SwiperSlide>
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-6"></a></SwiperSlide>
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-7"></a></SwiperSlide>
-          <SwiperSlide class="swiper-slide"><a href="#" class="banner-8"></a></SwiperSlide>
-
-          </Swiper>
+          
+          <SwiperSlide class="swiper-slide" v-for="(item, index) in bannerData" :key="index">
+            <a :href="item.link" :style="{
+                backgroundImage:`url(${ item.imgurl })`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'}">
+            </a>
+          </SwiperSlide>
+        </Swiper>
 
         </div>
       </div>
@@ -70,11 +67,12 @@
 </template>
 
 <script>
-  import {ref} from 'vue';
+  import {computed, ref} from 'vue';
   import { Swiper, SwiperSlide } from 'swiper/vue'
   import 'swiper/css'
   import { Autoplay, Navigation } from 'swiper'
   import "swiper/css/navigation";
+  import { useStore } from 'vuex';
 
   export default {
     components: {
@@ -83,6 +81,9 @@
     },
 
     setup() {
+
+      const store = useStore();
+      const bannerData = computed( () => store.getters.bannerData)
       // Swiper를 참조한다.
       const slide = ref(null);
       const swBanner = (swiper) => {
@@ -109,6 +110,7 @@
         swBanner,
         controlSlide,
         slideState,
+        bannerData
       }
     }
   }

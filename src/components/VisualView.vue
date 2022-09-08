@@ -1,7 +1,6 @@
 <template>
   <section class="visual">
       <!-- Swiper -->
-
       <Swiper
       :modules="modules"
       :autoplay="{
@@ -17,15 +16,19 @@
       v-on:swiper="visualSlide" 
       class="sw-visual"
       >
-      <SwiperSlide class="swiper-slide">
-        <a href="#" class="vs-1"></a>
-      </SwiperSlide>
-      <SwiperSlide class="swiper-slide">
-        <a href="#" class="vs-2"></a>
-      </SwiperSlide>
-      <SwiperSlide class="swiper-slide">
-        <a href="#" class="vs-3"></a>
-      </SwiperSlide>
+      <SwiperSlide class="swiper-slide" v-for="(item, index) in visualData" :key="index">
+        <a 
+          :href="item.link" 
+          :style="{
+            backgroundImage:`url(${ resW ? item.imgurl : item.imgurl_mb })`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+            }"
+          :data-bg-mb="item.imgurl_mb"
+          :data-bg = "item.imgurl"
+        >
+        </a>
+      </SwiperSlide>      
       
       <!-- 슬라이더 페이지네이션 -->
       <div class="sw-visual-control">
@@ -46,12 +49,14 @@
 </template>
 
 <script>
-  import {ref} from 'vue'
-  import {Swiper, SwiperSlide} from 'swiper/vue'
+  import { computed, onMounted, ref } from 'vue'
+  import { Swiper, SwiperSlide } from 'swiper/vue'
   import 'swiper/css'
   import 'swiper/css/pagination'
   import "swiper/css/effect-fade";
-  import {Autoplay, EffectFade, Pagination} from 'swiper'
+  import { Autoplay, EffectFade, Pagination } from 'swiper';
+
+  import { useStore } from 'vuex';
 
   export default {
     components: {
@@ -60,11 +65,22 @@
     },
 
     setup(){
+
+      // state의 visual data를 받아온다.
+      const store = useStore();
+      // getters의 visual data를 computed로 받아온다.
+      const visualData = computed(() => store.getters.visualData)
+      // Style 바인딩을 이용한다. v-bind:style = "내용"
+      
       const slide = ref(null);
       const visualSlide = (swiper) => {
         // ref라서 value로 저장함.
         slide.value = swiper
+        // 1번부터 실행
+        slide.value.slideTo(1);
       }
+
+
       // 아이콘을 변경하기 위한 문자열 저장
       const slideState = ref('pause');
       const controlSlide = () => {
@@ -76,11 +92,43 @@
           slideState.value = ('pause');
         }
       }
+
+
+      // 현재 1400보다 크면 true, 작으면 false
+      const resW = ref(true);
+
+      onMounted( () => {
+
+        // checkWin 메서드 : resW 체크하는 메서드
+        const checkWin = () => {
+          // 1. 윈도우 너비를 체크
+          let w = window.innerWidth;
+          if(w <= 1400) {
+            resW.value = false;            
+          }else{
+            resW.value = true;            
+          }
+          // console.log(w)
+          // console.log(resW.value)
+        }
+
+        // 윈도우에 resize 이벤트를 연결
+        window.addEventListener('resize', checkWin);
+        // $(window).on('resize', function(){})
+        // $(window).resize(function(){})
+        
+        // 최초 한번실행
+        checkWin();
+      })
+
+
       return{
         modules: [Autoplay, EffectFade, Pagination],
         visualSlide,
         controlSlide,
         slideState,
+        visualData,
+        resW
       }
     }
 
@@ -155,7 +203,7 @@
   display: inline-block;
   width: 23px;
   height: 22px;
-  vertical-align: bottom;
+  vertical-align: top;
   background: transparent;
   /* background: url('@/assets/images/pause.png') no-repeat center; */
   cursor: pointer;

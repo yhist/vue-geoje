@@ -10,7 +10,13 @@ export default createStore({
   state: {
     menuDataArr: [],
     visualDataArr: [],
+    galleryDataArr:[],
+    movieData:{},
+    infoDataArr: [],
+    newDataArr:[],
+    bannerDataArr:[]
   },
+
 
   // 외부 json 및 서버연동
   // axios 호출 시점
@@ -26,7 +32,6 @@ export default createStore({
       .catch(err => console.log(err))
     },
 
-    // 비주얼 데이터 가져오기
     fetchGetVisual({commit}) {
       axios.get('./data/visual.json')
       .then(res => {
@@ -35,19 +40,85 @@ export default createStore({
       })
       .catch(err => console.log(err))
     },
+
+    fetchGetGallery({commit}) {
+      axios.get('./data/gallery.json')
+      .then(res => {
+        // console.log(res.data);
+        commit('UPDATE_GALLERY_DATA', res.data)
+      })
+      .catch(err => console.log(err))
+    },
+
+    fetchGetMovie({commit}) {
+      axios.get('./data/movie.json')
+      .then(res => {
+        // console.log(res.data);
+        commit('UPDATE_MOVIE_DATA', res.data)
+      })
+      .catch(err => console.log(err))
+    },
+
+    fetchGetInfo({commit}) {
+      axios.get('./data/info.json')
+      .then(res => {
+        // console.log(res.data);
+        commit('UPDATE_INFO_DATA', res.data)
+      })
+      .catch(err => console.log(err))
+    },
+
+    fetchGetNews({commit}) {
+      axios.get('./data/news.json')
+      .then(res => {
+        // console.log(res.data);
+        commit('UPDATE_NEWS_DATA', res.data)
+      })
+      .catch(err => console.log(err))
+    },
+
+    fetchGetBanner({commit}) {
+      axios.get('./data/banner.json')
+      .then(res => {
+        // console.log(res.data);
+        commit('UPDATE_BANNER_DATA', res.data)
+      })
+      .catch(err => console.log(err))
+    }
   },
   
+
   // actions으로 부터 데이터를 전송받고 state를 업데이트한다.
   // action에서 commit으로 받아온다. 
   mutations: {
     UPDATE_MENU_DATA(state, payload){
       state.menuDataArr = payload
     },
+
     UPDATE_VISUAL_DATA(state, payload){
       state.visualDataArr = payload
-    }
+    },
 
-  },
+    UPDATE_GALLERY_DATA(state, payload){
+      state.galleryDataArr = payload
+    },
+
+    UPDATE_MOVIE_DATA(state, payload){
+      state.movieData = payload
+    },
+
+    UPDATE_INFO_DATA(state, payload){
+      state.infoData = payload
+    },
+
+    UPDATE_NEWS_DATA(state, payload){
+      state.newsData = payload
+    },
+
+    UPDATE_BANNER_DATA(state, payload){
+      state.bannerData = payload
+    }
+},
 
   // 외부 컴포넌트에서 state를 참조할때 활용
   // state가 바뀌면 즉시 반영을 위해서 외부 컴포넌트는
@@ -59,6 +130,27 @@ export default createStore({
 
     visualData(state){
       return state.visualDataArr
+    },
+
+    galleryData(state){
+      return state.galleryDataArr
+    },
+
+    movieData(state){
+      return state.movieData
+    },
+
+    infoData(state){
+      return state.infoData
+    },
+
+    newsData(state){
+      return state.infoData
+    },
+
+    bannerData(state){
+      return state.bannerData
     }
   }
+
 })

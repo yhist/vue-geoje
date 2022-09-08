@@ -1,5 +1,7 @@
 <template>
   <div>
+    <!-- 안내창  -->
+    <ModalView/>
     <!-- 더보기 메뉴 -->
     <MoreWrapView/>
     <!-- 모바일 버튼 -->
@@ -26,6 +28,7 @@
 </template>
 
 <script>
+import ModalView from "./components/ModalView.vue";
 import MoreWrapView from "./components/MoreWrapView.vue";
 import MbBt from "./components/MbBt.vue";
 import MbWrapView from "./components/MbWrapView.vue";
@@ -52,11 +55,17 @@ export default {
     GalleryView,
     BannerView,
     FooterView,
+    ModalView
 },
     setup() {
       const store = useStore();
       store.dispatch('fetchGetMenu');
       store.dispatch('fetchGetVisual');
+      store.dispatch('fetchGetGallery');
+      store.dispatch('fetchGetMovie');
+      store.dispatch('fetchGetInfo');
+      store.dispatch('fetchGetNews');
+      store.dispatch('fetchGetBanner');
       return {};
     },
   }
