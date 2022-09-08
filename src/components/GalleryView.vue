@@ -34,7 +34,7 @@
           <div class="gallery-video">
             <iframe width="100%" height="100%" :src="movieData.movie_url"
               title="YouTube video player" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay=0; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen></iframe>
           </div>
         </div>
